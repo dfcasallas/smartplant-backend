@@ -3,3 +3,6 @@ values:
   - key: baseUrl
     enabled: true
     value: 'http://localhost:8080'
+  - key: usuarioId
+    enabled: true
+    value: '1'

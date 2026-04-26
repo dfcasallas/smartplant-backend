@@ -1,0 +1,16 @@
+$kind: http-request
+name: Registrar
+method: POST
+url: '{{baseUrl}}/api/auth/register'
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "nombre": "Juan Pérez",
+      "email": "juan@example.com",
+      "password": "123456",
+      "rol": "USER"
+    }

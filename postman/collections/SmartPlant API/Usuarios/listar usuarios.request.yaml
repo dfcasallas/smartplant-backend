@@ -1,0 +1,4 @@
+$kind: http-request
+name: Listar Usuarios
+method: GET
+url: '{{baseUrl}}/api/usuarios'
