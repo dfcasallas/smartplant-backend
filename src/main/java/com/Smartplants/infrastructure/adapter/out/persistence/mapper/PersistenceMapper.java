@@ -1,11 +1,13 @@
 package com.Smartplants.infrastructure.adapter.out.persistence.mapper;
 
 import com.Smartplants.domain.model.Familia;
+import com.Smartplants.domain.model.CuidadoPlanta;
 import com.Smartplants.domain.model.InventarioPlanta;
 import com.Smartplants.domain.model.Mantenimiento;
 import com.Smartplants.domain.model.Planta;
 import com.Smartplants.domain.model.Salud;
 import com.Smartplants.domain.model.Tipo;
+import com.Smartplants.infrastructure.adapter.out.persistence.entity.CuidadoPlantaEntity;
 import com.Smartplants.infrastructure.adapter.out.persistence.entity.FamiliaEntity;
 import com.Smartplants.infrastructure.adapter.out.persistence.entity.InventarioPlantaEntity;
 import com.Smartplants.infrastructure.adapter.out.persistence.entity.MantenimientoEntity;
@@ -160,6 +162,34 @@ public class PersistenceMapper {
         entity.setPlanta(toPlantaEntity(domain.getPlanta()));
         entity.setNombrePersonalizado(domain.getNombrePersonalizado());
         entity.setFechaAgregado(domain.getFechaAgregado());
+        return entity;
+    }
+
+    public CuidadoPlanta toCuidadoDomain(CuidadoPlantaEntity entity) {
+        if (entity == null) {
+            return null;
+        }
+        return CuidadoPlanta.builder()
+                .id(entity.getId())
+                .inventarioId(entity.getInventarioId())
+                .tipoCuidado(entity.getTipoCuidado())
+                .fecha(entity.getFecha())
+                .observacion(entity.getObservacion())
+                .proximaFechaSugerida(entity.getProximaFechaSugerida())
+                .build();
+    }
+
+    public CuidadoPlantaEntity toCuidadoEntity(CuidadoPlanta domain) {
+        if (domain == null) {
+            return null;
+        }
+        CuidadoPlantaEntity entity = new CuidadoPlantaEntity();
+        entity.setId(domain.getId());
+        entity.setInventarioId(domain.getInventarioId());
+        entity.setTipoCuidado(domain.getTipoCuidado());
+        entity.setFecha(domain.getFecha());
+        entity.setObservacion(domain.getObservacion());
+        entity.setProximaFechaSugerida(domain.getProximaFechaSugerida());
         return entity;
     }
 }
