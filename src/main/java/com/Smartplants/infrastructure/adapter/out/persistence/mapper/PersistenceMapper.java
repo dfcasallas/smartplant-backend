@@ -1,11 +1,13 @@
 package com.Smartplants.infrastructure.adapter.out.persistence.mapper;
 
 import com.Smartplants.domain.model.Familia;
+import com.Smartplants.domain.model.InventarioPlanta;
 import com.Smartplants.domain.model.Mantenimiento;
 import com.Smartplants.domain.model.Planta;
 import com.Smartplants.domain.model.Salud;
 import com.Smartplants.domain.model.Tipo;
 import com.Smartplants.infrastructure.adapter.out.persistence.entity.FamiliaEntity;
+import com.Smartplants.infrastructure.adapter.out.persistence.entity.InventarioPlantaEntity;
 import com.Smartplants.infrastructure.adapter.out.persistence.entity.MantenimientoEntity;
 import com.Smartplants.infrastructure.adapter.out.persistence.entity.PlantaEntity;
 import com.Smartplants.infrastructure.adapter.out.persistence.entity.SaludEntity;
@@ -132,6 +134,32 @@ public class PersistenceMapper {
         entity.setFamilia(toFamiliaEntity(domain.getFamilia()));
         entity.setMantenimiento(toMantenimientoEntity(domain.getMantenimiento()));
         entity.setSalud(toSaludEntity(domain.getSalud()));
+        return entity;
+    }
+
+    public InventarioPlanta toInventarioDomain(InventarioPlantaEntity entity) {
+        if (entity == null) {
+            return null;
+        }
+        return InventarioPlanta.builder()
+                .id(entity.getId())
+                .usuarioId(entity.getUsuarioId())
+                .planta(toPlantaDomain(entity.getPlanta()))
+                .nombrePersonalizado(entity.getNombrePersonalizado())
+                .fechaAgregado(entity.getFechaAgregado())
+                .build();
+    }
+
+    public InventarioPlantaEntity toInventarioEntity(InventarioPlanta domain) {
+        if (domain == null) {
+            return null;
+        }
+        InventarioPlantaEntity entity = new InventarioPlantaEntity();
+        entity.setId(domain.getId());
+        entity.setUsuarioId(domain.getUsuarioId());
+        entity.setPlanta(toPlantaEntity(domain.getPlanta()));
+        entity.setNombrePersonalizado(domain.getNombrePersonalizado());
+        entity.setFechaAgregado(domain.getFechaAgregado());
         return entity;
     }
 }
