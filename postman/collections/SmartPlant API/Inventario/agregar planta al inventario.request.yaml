@@ -1,0 +1,18 @@
+$kind: http-request
+name: Agregar Planta al Inventario
+method: POST
+url: '{{baseUrl}}/api/usuarios/:usuarioId/inventario'
+order: 1000
+pathVariables:
+  - key: usuarioId
+    value: '1'
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "plantaId": 1,
+      "nombrePersonalizado": "Mi Rosa"
+    }

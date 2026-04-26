@@ -1,0 +1,8 @@
+$kind: http-request
+name: Listar Cuidados por Inventario
+method: GET
+url: '{{baseUrl}}/api/inventario/:inventarioId/cuidados'
+order: 2000
+pathVariables:
+  - key: inventarioId
+    value: '1'

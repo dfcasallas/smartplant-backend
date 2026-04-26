@@ -1,0 +1,19 @@
+$kind: http-request
+name: Sugerir Planta
+method: POST
+url: '{{baseUrl}}/api/sugerencias'
+order: 1000
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "mantenimiento": "BAJO",
+      "luz": 6,
+      "riego": 2,
+      "temperatura": 18,
+      "tamano": 30,
+      "ambiente": 1
+    }

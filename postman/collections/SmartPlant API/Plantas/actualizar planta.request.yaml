@@ -1,0 +1,27 @@
+$kind: http-request
+name: Actualizar Planta
+method: PUT
+url: '{{baseUrl}}/api/plantas/:id'
+order: 4000
+pathVariables:
+  - key: id
+    value: '1'
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "nombre": "Rosa Actualizada",
+      "descripcion": "Planta ornamental con flores rojas",
+      "luz": 9,
+      "riego": 4,
+      "temperatura": 22,
+      "tamano": 60,
+      "ambiente": 1,
+      "tipoId": 1,
+      "familiaId": 1,
+      "mantenimientoId": 1,
+      "saludId": 1
+    }

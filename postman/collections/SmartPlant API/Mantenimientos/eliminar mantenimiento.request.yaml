@@ -1,0 +1,8 @@
+$kind: http-request
+name: Eliminar Mantenimiento
+method: DELETE
+url: '{{baseUrl}}/api/mantenimientos/:id'
+order: 4000
+pathVariables:
+  - key: id
+    value: '1'

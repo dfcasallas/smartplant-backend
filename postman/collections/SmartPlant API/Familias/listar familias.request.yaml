@@ -1,0 +1,5 @@
+$kind: http-request
+name: Listar Familias
+method: GET
+url: '{{baseUrl}}/api/familias'
+order: 1000

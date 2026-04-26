@@ -1,0 +1,5 @@
+$kind: http-request
+name: Listar Mantenimientos
+method: GET
+url: '{{baseUrl}}/api/mantenimientos'
+order: 1000

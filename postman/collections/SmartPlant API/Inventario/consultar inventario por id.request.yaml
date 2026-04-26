@@ -1,0 +1,8 @@
+$kind: http-request
+name: Consultar Inventario por ID
+method: GET
+url: '{{baseUrl}}/api/inventario/:inventarioId'
+order: 3000
+pathVariables:
+  - key: inventarioId
+    value: '1'

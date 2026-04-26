@@ -1,0 +1,14 @@
+$kind: http-request
+name: Crear Familia
+method: POST
+url: '{{baseUrl}}/api/familias'
+order: 2000
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "nombre": "Rosaceae"
+    }

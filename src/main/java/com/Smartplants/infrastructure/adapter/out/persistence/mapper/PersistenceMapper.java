@@ -7,6 +7,7 @@ import com.Smartplants.domain.model.Mantenimiento;
 import com.Smartplants.domain.model.Planta;
 import com.Smartplants.domain.model.Salud;
 import com.Smartplants.domain.model.Tipo;
+import com.Smartplants.domain.model.Usuario;
 import com.Smartplants.infrastructure.adapter.out.persistence.entity.CuidadoPlantaEntity;
 import com.Smartplants.infrastructure.adapter.out.persistence.entity.FamiliaEntity;
 import com.Smartplants.infrastructure.adapter.out.persistence.entity.InventarioPlantaEntity;
@@ -14,6 +15,7 @@ import com.Smartplants.infrastructure.adapter.out.persistence.entity.Mantenimien
 import com.Smartplants.infrastructure.adapter.out.persistence.entity.PlantaEntity;
 import com.Smartplants.infrastructure.adapter.out.persistence.entity.SaludEntity;
 import com.Smartplants.infrastructure.adapter.out.persistence.entity.TipoEntity;
+import com.Smartplants.infrastructure.adapter.out.persistence.entity.UsuarioEntity;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -190,6 +192,34 @@ public class PersistenceMapper {
         entity.setFecha(domain.getFecha());
         entity.setObservacion(domain.getObservacion());
         entity.setProximaFechaSugerida(domain.getProximaFechaSugerida());
+        return entity;
+    }
+
+    public Usuario toUsuarioDomain(UsuarioEntity entity) {
+        if (entity == null) {
+            return null;
+        }
+        return Usuario.builder()
+                .id(entity.getId())
+                .nombre(entity.getNombre())
+                .email(entity.getEmail())
+                .password(entity.getPassword())
+                .rol(entity.getRol())
+                .ultimaConexion(entity.getUltimaConexion())
+                .build();
+    }
+
+    public UsuarioEntity toUsuarioEntity(Usuario domain) {
+        if (domain == null) {
+            return null;
+        }
+        UsuarioEntity entity = new UsuarioEntity();
+        entity.setId(domain.getId());
+        entity.setNombre(domain.getNombre());
+        entity.setEmail(domain.getEmail());
+        entity.setPassword(domain.getPassword());
+        entity.setRol(domain.getRol());
+        entity.setUltimaConexion(domain.getUltimaConexion());
         return entity;
     }
 }

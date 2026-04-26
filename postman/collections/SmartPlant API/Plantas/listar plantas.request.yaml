@@ -1,0 +1,5 @@
+$kind: http-request
+name: Listar Plantas
+method: GET
+url: '{{baseUrl}}/api/plantas'
+order: 1000

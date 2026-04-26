@@ -1,0 +1,8 @@
+$kind: http-request
+name: Listar Inventario por Usuario
+method: GET
+url: '{{baseUrl}}/api/usuarios/:usuarioId/inventario'
+order: 2000
+pathVariables:
+  - key: usuarioId
+    value: '1'

@@ -1,5 +1,6 @@
 package com.Smartplants.infrastructure.config;
 
+import com.Smartplants.domain.exception.AuthenticationException;
 import com.Smartplants.domain.exception.ResourceNotFoundException;
 import com.Smartplants.domain.exception.ValidationException;
 import com.Smartplants.infrastructure.adapter.in.web.response.ApiErrorResponse;
@@ -28,6 +29,14 @@ public class GlobalExceptionHandler {
             HttpServletRequest request
     ) {
         return buildResponse(HttpStatus.BAD_REQUEST, exception.getMessage(), request.getRequestURI());
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<ApiErrorResponse> handleAuthentication(
+            AuthenticationException exception,
+            HttpServletRequest request
+    ) {
+        return buildResponse(HttpStatus.UNAUTHORIZED, exception.getMessage(), request.getRequestURI());
     }
 
     private ResponseEntity<ApiErrorResponse> buildResponse(HttpStatus status, String message, String path) {

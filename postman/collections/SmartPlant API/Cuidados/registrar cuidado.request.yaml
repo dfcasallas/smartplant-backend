@@ -1,0 +1,18 @@
+$kind: http-request
+name: Registrar Cuidado
+method: POST
+url: '{{baseUrl}}/api/inventario/:inventarioId/cuidados'
+order: 1000
+pathVariables:
+  - key: inventarioId
+    value: '1'
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "tipoCuidado": "RIEGO",
+      "observacion": "Riego moderado realizado"
+    }

@@ -1,0 +1,8 @@
+$kind: http-request
+name: Eliminar Inventario
+method: DELETE
+url: '{{baseUrl}}/api/inventario/:inventarioId'
+order: 4000
+pathVariables:
+  - key: inventarioId
+    value: '1'

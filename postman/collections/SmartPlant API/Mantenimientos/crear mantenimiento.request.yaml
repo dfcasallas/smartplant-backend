@@ -1,0 +1,14 @@
+$kind: http-request
+name: Crear Mantenimiento
+method: POST
+url: '{{baseUrl}}/api/mantenimientos'
+order: 2000
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "nivel": "BAJO"
+    }

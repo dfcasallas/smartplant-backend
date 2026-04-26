@@ -1,0 +1,8 @@
+$kind: http-request
+name: Eliminar Salud
+method: DELETE
+url: '{{baseUrl}}/api/saludes/:id'
+order: 4000
+pathVariables:
+  - key: id
+    value: '1'

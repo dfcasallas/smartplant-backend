@@ -1,0 +1,14 @@
+$kind: http-request
+name: Crear Salud
+method: POST
+url: '{{baseUrl}}/api/saludes'
+order: 2000
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "estado": "SALUDABLE"
+    }

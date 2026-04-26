@@ -1,0 +1,24 @@
+$kind: http-request
+name: Crear Planta
+method: POST
+url: '{{baseUrl}}/api/plantas'
+order: 3000
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "nombre": "Rosa",
+      "descripcion": "Planta ornamental con flores",
+      "luz": 8,
+      "riego": 3,
+      "temperatura": 20,
+      "tamano": 50,
+      "ambiente": 1,
+      "tipoId": 1,
+      "familiaId": 1,
+      "mantenimientoId": 1,
+      "saludId": 1
+    }
