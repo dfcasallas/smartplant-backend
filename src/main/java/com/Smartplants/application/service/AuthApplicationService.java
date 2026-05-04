@@ -3,6 +3,7 @@ package com.Smartplants.application.service;
 import com.Smartplants.application.command.LoginCommand;
 import com.Smartplants.application.command.RegistrarUsuarioCommand;
 import com.Smartplants.application.port.in.AuthUseCase;
+import com.Smartplants.application.port.out.PasswordHasherPort;
 import com.Smartplants.application.port.out.UsuarioRepositoryPort;
 import com.Smartplants.domain.exception.AuthenticationException;
 import com.Smartplants.domain.exception.ValidationException;
@@ -19,6 +20,7 @@ import java.util.Locale;
 public class AuthApplicationService implements AuthUseCase {
 
     private final UsuarioRepositoryPort usuarioRepository;
+    private final PasswordHasherPort passwordHasher;
 
     @Override
     public Usuario registrar(RegistrarUsuarioCommand command) {
@@ -32,7 +34,7 @@ public class AuthApplicationService implements AuthUseCase {
         Usuario usuario = Usuario.builder()
                 .nombre(command.getNombre().trim())
                 .email(email)
-                .password(command.getPassword())
+                .password(passwordHasher.encode(command.getPassword()))
                 .rol(parseRol(command.getRol()))
                 .build();
 
@@ -47,12 +49,23 @@ public class AuthApplicationService implements AuthUseCase {
         Usuario usuario = usuarioRepository.findByEmail(email)
                 .orElseThrow(() -> new AuthenticationException("Credenciales invalidas"));
 
-        if (!usuario.getPassword().equals(command.getPassword())) {
+        if (!passwordMatches(command.getPassword(), usuario.getPassword())) {
             throw new AuthenticationException("Credenciales invalidas");
         }
 
         usuario.setUltimaConexion(LocalDateTime.now());
+        if (!passwordHasher.isEncoded(usuario.getPassword())) {
+            usuario.setPassword(passwordHasher.encode(command.getPassword()));
+        }
         return usuarioRepository.save(usuario);
+    }
+
+    private boolean passwordMatches(String rawPassword, String storedPassword) {
+        if (passwordHasher.isEncoded(storedPassword)) {
+            return passwordHasher.matches(rawPassword, storedPassword);
+        }
+
+        return storedPassword != null && storedPassword.equals(rawPassword);
     }
 
     private void validarRegistro(RegistrarUsuarioCommand command) {

@@ -2,6 +2,7 @@ package com.Smartplants.application.service;
 
 import com.Smartplants.application.command.LoginCommand;
 import com.Smartplants.application.command.RegistrarUsuarioCommand;
+import com.Smartplants.application.port.out.PasswordHasherPort;
 import com.Smartplants.application.port.out.UsuarioRepositoryPort;
 import com.Smartplants.domain.exception.AuthenticationException;
 import com.Smartplants.domain.exception.ValidationException;
@@ -24,7 +25,7 @@ class AuthApplicationServiceTest {
     @Test
     void registraUsuarioCorrectamente() {
         InMemoryUsuarioRepository usuarioRepository = new InMemoryUsuarioRepository();
-        AuthApplicationService service = new AuthApplicationService(usuarioRepository);
+        AuthApplicationService service = service(usuarioRepository);
 
         Usuario usuario = service.registrar(RegistrarUsuarioCommand.builder()
                 .nombre("Daniel")
@@ -36,7 +37,7 @@ class AuthApplicationServiceTest {
         assertNotNull(usuario.getId());
         assertEquals("Daniel", usuario.getNombre());
         assertEquals("daniel@email.com", usuario.getEmail());
-        assertEquals("123456", usuario.getPassword());
+        assertEquals("{hash}123456", usuario.getPassword());
         assertEquals(Rol.ADMIN, usuario.getRol());
         assertNull(usuario.getUltimaConexion());
     }
@@ -44,7 +45,7 @@ class AuthApplicationServiceTest {
     @Test
     void noPermiteEmailDuplicado() {
         InMemoryUsuarioRepository usuarioRepository = new InMemoryUsuarioRepository();
-        AuthApplicationService service = new AuthApplicationService(usuarioRepository);
+        AuthApplicationService service = service(usuarioRepository);
 
         service.registrar(RegistrarUsuarioCommand.builder()
                 .nombre("Daniel")
@@ -68,7 +69,7 @@ class AuthApplicationServiceTest {
     @Test
     void loginCorrectoActualizaUltimaConexion() {
         InMemoryUsuarioRepository usuarioRepository = new InMemoryUsuarioRepository();
-        AuthApplicationService service = new AuthApplicationService(usuarioRepository);
+        AuthApplicationService service = service(usuarioRepository);
 
         Usuario registrado = service.registrar(RegistrarUsuarioCommand.builder()
                 .nombre("Daniel")
@@ -85,12 +86,13 @@ class AuthApplicationServiceTest {
         assertEquals(registrado.getId(), login.getId());
         assertEquals("Daniel", login.getNombre());
         assertNotNull(login.getUltimaConexion());
+        assertEquals("{hash}123456", login.getPassword());
     }
 
     @Test
     void loginConPasswordIncorrectaFalla() {
         InMemoryUsuarioRepository usuarioRepository = new InMemoryUsuarioRepository();
-        AuthApplicationService service = new AuthApplicationService(usuarioRepository);
+        AuthApplicationService service = service(usuarioRepository);
 
         Usuario registrado = service.registrar(RegistrarUsuarioCommand.builder()
                 .nombre("Daniel")
@@ -112,7 +114,7 @@ class AuthApplicationServiceTest {
 
     @Test
     void asignaRolUserPorDefecto() {
-        AuthApplicationService service = new AuthApplicationService(new InMemoryUsuarioRepository());
+        AuthApplicationService service = service(new InMemoryUsuarioRepository());
 
         Usuario usuario = service.registrar(RegistrarUsuarioCommand.builder()
                 .nombre("Daniel")
@@ -121,6 +123,48 @@ class AuthApplicationServiceTest {
                 .build());
 
         assertEquals(Rol.USER, usuario.getRol());
+    }
+
+    @Test
+    void loginAceptaPasswordPlanoExistenteYLoMigraAHash() {
+        InMemoryUsuarioRepository usuarioRepository = new InMemoryUsuarioRepository();
+        usuarioRepository.save(Usuario.builder()
+                .nombre("Legacy")
+                .email("legacy@email.com")
+                .password("123456")
+                .rol(Rol.USER)
+                .build());
+        AuthApplicationService service = service(usuarioRepository);
+
+        Usuario login = service.login(LoginCommand.builder()
+                .email("legacy@email.com")
+                .password("123456")
+                .build());
+
+        assertEquals("{hash}123456", login.getPassword());
+        assertNotNull(login.getUltimaConexion());
+    }
+
+    private AuthApplicationService service(InMemoryUsuarioRepository usuarioRepository) {
+        return new AuthApplicationService(usuarioRepository, new TestPasswordHasher());
+    }
+
+    private static final class TestPasswordHasher implements PasswordHasherPort {
+
+        @Override
+        public String encode(String rawPassword) {
+            return "{hash}" + rawPassword;
+        }
+
+        @Override
+        public boolean matches(String rawPassword, String storedPassword) {
+            return encode(rawPassword).equals(storedPassword);
+        }
+
+        @Override
+        public boolean isEncoded(String storedPassword) {
+            return storedPassword != null && storedPassword.startsWith("{hash}");
+        }
     }
 
     private static final class InMemoryUsuarioRepository implements UsuarioRepositoryPort {

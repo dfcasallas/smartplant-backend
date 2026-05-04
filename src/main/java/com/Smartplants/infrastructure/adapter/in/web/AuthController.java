@@ -6,7 +6,9 @@ import com.Smartplants.application.port.in.AuthUseCase;
 import com.Smartplants.domain.model.Usuario;
 import com.Smartplants.infrastructure.adapter.in.web.request.LoginRequest;
 import com.Smartplants.infrastructure.adapter.in.web.request.RegisterRequest;
+import com.Smartplants.infrastructure.adapter.in.web.response.LoginResponse;
 import com.Smartplants.infrastructure.adapter.in.web.response.UsuarioResponse;
+import com.Smartplants.infrastructure.security.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     private final AuthUseCase useCase;
+    private final JwtService jwtService;
 
     @PostMapping("/register")
     public UsuarioResponse registrar(@RequestBody RegisterRequest request) {
@@ -26,8 +29,9 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public UsuarioResponse login(@RequestBody LoginRequest request) {
-        return toResponse(useCase.login(toCommand(request)));
+    public LoginResponse login(@RequestBody LoginRequest request) {
+        Usuario usuario = useCase.login(toCommand(request));
+        return toLoginResponse(usuario, jwtService.generateToken(usuario));
     }
 
     private RegistrarUsuarioCommand toCommand(RegisterRequest request) {
@@ -53,6 +57,17 @@ public class AuthController {
                 .email(usuario.getEmail())
                 .rol(usuario.getRol().name())
                 .ultimaConexion(usuario.getUltimaConexion())
+                .build();
+    }
+
+    private LoginResponse toLoginResponse(Usuario usuario, String token) {
+        return LoginResponse.builder()
+                .id(usuario.getId())
+                .nombre(usuario.getNombre())
+                .email(usuario.getEmail())
+                .rol(usuario.getRol().name())
+                .ultimaConexion(usuario.getUltimaConexion())
+                .token(token)
                 .build();
     }
 }
