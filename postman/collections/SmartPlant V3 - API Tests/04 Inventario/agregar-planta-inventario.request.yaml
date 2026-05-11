@@ -1,0 +1,26 @@
+$kind: http-request
+name: Agregar Planta al Inventario
+method: POST
+url: '{{baseUrl}}/usuarios/{{usuarioId}}/inventario'
+order: 1000
+headers:
+  - key: Authorization
+    value: 'Bearer {{token}}'
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "plantaId": {{plantaId}},
+      "nombrePersonalizado": "Planta demo Postman"
+    }
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      const json = pm.response.json();
+      pm.test("Planta agregada al inventario", function () {
+        pm.expect(pm.response.code).to.be.oneOf([200, 201]);
+      });
+      pm.environment.set("inventarioId", json.id);

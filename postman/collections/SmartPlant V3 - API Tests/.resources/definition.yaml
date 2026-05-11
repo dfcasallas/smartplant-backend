@@ -1,0 +1,3 @@
+$kind: collection
+name: SmartPlant V3 - API Tests
+description: 'Pruebas funcionales, de seguridad JWT y de flujo E2E para SmartPlant V3.'

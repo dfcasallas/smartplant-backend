@@ -1,18 +1,20 @@
-name: Local
+name: SmartPlant Local
 values:
   - key: baseUrl
     value: 'http://localhost:8080/api'
     enabled: true
-    type: default
   - key: token
     value: ''
     enabled: true
-    type: default
   - key: usuarioId
+    value: ''
+    enabled: true
+  - key: plantaId
     value: '1'
     enabled: true
-    type: default
   - key: inventarioId
-    value: '1'
+    value: ''
     enabled: true
-    type: default
+  - key: cuidadoId
+    value: ''
+    enabled: true

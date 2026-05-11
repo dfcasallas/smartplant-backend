@@ -1,0 +1,27 @@
+$kind: http-request
+name: Crear Sugerencia
+method: POST
+url: '{{baseUrl}}/sugerencias'
+order: 1000
+headers:
+  - key: Authorization
+    value: 'Bearer {{token}}'
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "plantaId": {{plantaId}},
+      "mensaje": "Ajusta los campos según el contrato del backend"
+    }
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test("Sugerencia responde correctamente", function () {
+        pm.expect(pm.response.code).to.be.oneOf([200, 400]);
+      });
+      pm.test("Respuesta es JSON valida", function () {
+        pm.response.to.be.json;
+      });

@@ -1,0 +1,27 @@
+$kind: http-request
+name: Chat IA
+method: POST
+url: '{{baseUrl}}/chat'
+order: 1000
+headers:
+  - key: Authorization
+    value: 'Bearer {{token}}'
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "pregunta": "¿Por qué mi cactus no florece?"
+    }
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      const json = pm.response.json();
+      pm.test("Chat IA responde OK", function () {
+        pm.response.to.have.status(200);
+      });
+      pm.test("Respuesta contiene campo respuesta", function () {
+        pm.expect(json.respuesta).to.exist;
+      });

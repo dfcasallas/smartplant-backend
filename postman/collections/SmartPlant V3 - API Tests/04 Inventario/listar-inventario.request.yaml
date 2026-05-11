@@ -1,0 +1,19 @@
+$kind: http-request
+name: Listar Inventario
+method: GET
+url: '{{baseUrl}}/usuarios/{{usuarioId}}/inventario'
+order: 2000
+headers:
+  - key: Authorization
+    value: 'Bearer {{token}}'
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      const json = pm.response.json();
+      pm.test("Inventario OK", function () {
+        pm.response.to.have.status(200);
+      });
+      pm.test("Inventario es array", function () {
+        pm.expect(json).to.be.an("array");
+      });

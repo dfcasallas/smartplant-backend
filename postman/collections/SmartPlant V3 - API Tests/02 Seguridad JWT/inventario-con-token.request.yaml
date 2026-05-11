@@ -1,0 +1,15 @@
+$kind: http-request
+name: 'Inventario con token (200/204)'
+method: GET
+url: '{{baseUrl}}/usuarios/{{usuarioId}}/inventario'
+order: 2000
+headers:
+  - key: Authorization
+    value: 'Bearer {{token}}'
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test("Acceso con token valido", function () {
+        pm.expect(pm.response.code).to.be.oneOf([200, 204]);
+      });

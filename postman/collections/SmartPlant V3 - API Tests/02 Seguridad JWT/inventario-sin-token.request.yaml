@@ -1,0 +1,12 @@
+$kind: http-request
+name: 'Inventario sin token (401)'
+method: GET
+url: '{{baseUrl}}/usuarios/{{usuarioId}}/inventario'
+order: 1000
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test("Debe retornar 401 sin token", function () {
+        pm.response.to.have.status(401);
+      });

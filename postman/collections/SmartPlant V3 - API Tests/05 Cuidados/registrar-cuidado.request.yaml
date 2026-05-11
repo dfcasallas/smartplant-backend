@@ -1,0 +1,26 @@
+$kind: http-request
+name: Registrar Cuidado
+method: POST
+url: '{{baseUrl}}/inventario/{{inventarioId}}/cuidados'
+order: 1000
+headers:
+  - key: Authorization
+    value: 'Bearer {{token}}'
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "tipoCuidado": "RIEGO",
+      "observacion": "Prueba de cuidado desde Postman"
+    }
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      const json = pm.response.json();
+      pm.test("Cuidado registrado", function () {
+        pm.expect(pm.response.code).to.be.oneOf([200, 201]);
+      });
+      pm.environment.set("cuidadoId", json.id);
